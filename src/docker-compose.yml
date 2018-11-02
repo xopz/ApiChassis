@@ -1,5 +1,11 @@
 version: '2'
 services:
+  # Redis Cache: https://hub.docker.com/_/redis/
+  redis:
+    image: redis:5-alpine
+    ports: 
+      # Redis standard port
+      - 6379:6379
   # MongoDB: https://hub.docker.com/_/mongo/
   mongo:
     image: mongo:3
