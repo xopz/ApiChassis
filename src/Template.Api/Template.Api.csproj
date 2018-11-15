@@ -4,12 +4,20 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
     <Folder Include="Utils\" />
-    <Folder Include="Utils\Swagger\" />
-    <Folder Include="Utils\Swagger\SwaggerGen\" />
-    <Folder Include="Utils\Swagger\SwaggerGen\Extensions\" />
+    <Folder Include="Utils\Documentation\" />
+    <Folder Include="Utils\Documentation\SwaggerGen\" />
+    <Folder Include="Utils\Documentation\SwaggerGen\Extensions\" />
+    <Folder Include="Utils\Registration\" />
+    <Folder Include="Utils\Registration\Extensions\" />
+    <Folder Include="Utils\Registration\Configuration\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +28,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.1.2" />
+    <PackageReference Include="Consul" Version="0.7.2.6" />
   </ItemGroup>
 
 </Project>

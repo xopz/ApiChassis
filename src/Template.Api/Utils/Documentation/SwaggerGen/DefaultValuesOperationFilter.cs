@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Template.Api.Utils.Swagger.SwaggerGen
+namespace Template.Api.Utils.Dcoumentation.SwaggerGen
 {
     /// <summary>
     /// Represents the Swagger/Swashbuckle operation filter used to document the implicit API version parameter.

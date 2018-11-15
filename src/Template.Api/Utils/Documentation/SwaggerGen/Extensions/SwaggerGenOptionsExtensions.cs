@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Template.Api.Utils.Swagger.SwaggerGen.Extensions
+namespace Template.Api.Utils.Documentation.SwaggerGen.Extensions
 {
     public static class SwaggerGenOptionsExtensions
     {

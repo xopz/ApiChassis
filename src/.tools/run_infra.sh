@@ -1,0 +1,1 @@
+docker-compose -f ../.environment/compose/docker-compose.infra.yml up -d

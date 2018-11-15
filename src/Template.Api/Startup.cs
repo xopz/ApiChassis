@@ -1,5 +1,7 @@
-﻿using System.IO.Compression;
+﻿using System;
+using System.IO.Compression;
 using System.Reflection;
+using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +10,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Template.Api.Utils.Swagger.SwaggerGen;
-using Template.Api.Utils.Swagger.SwaggerGen.Extensions;
+using Template.Api.Utils.Dcoumentation.SwaggerGen;
+using Template.Api.Utils.Documentation.SwaggerGen.Extensions;
 
 namespace Template.Api
 {
@@ -25,6 +27,11 @@ namespace Template.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // This configuration enables Service Registration to Consul
+            services.AddSingleton<IConsulClient, ConsulClient>(options => new ConsulClient(configuration => {
+                configuration.Address = new Uri(Configuration.GetConnectionString("ConsulConnection"));
+            }));
+
             // This configuration enables distributed cache via Redis
             services.AddDistributedRedisCache(options =>
             {
@@ -59,6 +66,7 @@ namespace Template.Api
                 {
                     options.GroupNameFormat = "'v'VVV";
                     options.SubstituteApiVersionInUrl = true;
+                    options.AssumeDefaultVersionWhenUnspecified = true;
                 });
             services.AddApiVersioning(options => options.ReportApiVersions = true);
 
@@ -79,7 +87,7 @@ namespace Template.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
