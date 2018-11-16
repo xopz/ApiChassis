@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Reflection;
-using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Template.Api.Utils.Dcoumentation.SwaggerGen;
 using Template.Api.Utils.Documentation.SwaggerGen.Extensions;
+using Microsoft.Extensions.HealthChecks;
 
 namespace Template.Api
 {
@@ -27,10 +26,24 @@ namespace Template.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // This configuration enables Service Registration to Consul
-            services.AddSingleton<IConsulClient, ConsulClient>(options => new ConsulClient(configuration => {
-                configuration.Address = new Uri(Configuration.GetConnectionString("ConsulConnection"));
-            }));
+            // This adds HealthCheck for app
+            services.AddHealthChecks(checks =>
+            {
+                checks.AddHealthCheckGroup(
+                    "memory", 
+                    group => group.AddPrivateMemorySizeCheck(1)
+                                  .AddVirtualMemorySizeCheck(2)
+                                  .AddWorkingSetCheck(1), 
+                    CheckStatus.Unhealthy);
+                checks.AddHealthCheckGroup(
+                    "redis",
+                    group => { },
+                    CheckStatus.Unhealthy);
+                checks.AddHealthCheckGroup(
+                    "etcd",
+                    group => { },
+                    CheckStatus.Unhealthy);
+            });
 
             // This configuration enables distributed cache via Redis
             services.AddDistributedRedisCache(options =>
@@ -87,7 +100,7 @@ namespace Template.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider, IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
