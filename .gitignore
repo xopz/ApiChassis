@@ -3,4 +3,4 @@
 **/.vs
 **/.vscode
 **/.DS_Store
-src/.environment/.vagrant/**/.vagrant
+src/.environment/vagrant/**/.vagrant

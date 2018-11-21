@@ -5,13 +5,9 @@ networks:
     driver: bridge
 
 services:
-  etcd:
-    image: 'bitnami/etcd:latest'
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379 #DevSkim: ignore DS137138 
+  redis:
+    image: 'redis:5-alpine'
     ports:
-      - 2379:2379
-      - 2380:2380
+      - 6379:6379
     networks:
       - app-tier

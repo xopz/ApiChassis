@@ -1,0 +1,19 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  app:
+    build:
+      dockerfile: ../.environment/Dockerfile
+      context: ../../Template.Api/
+    ports:
+      - 80:80
+    networks: 
+      - app-tier
+  redis:
+    image: 'redis:5-alpine'
+    networks:
+      - app-tier
