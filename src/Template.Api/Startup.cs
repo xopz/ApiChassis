@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Template.Api.Utils.Dcoumentation.SwaggerGen;
 using Template.Api.Utils.Documentation.SwaggerGen.Extensions;
 using Microsoft.Extensions.HealthChecks;
+using dotnet_etcd;
 
 namespace Template.Api
 {
@@ -26,6 +27,8 @@ namespace Template.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var _etcdClient = new EtcdClient("etcd", 2379);
+
             // This adds HealthCheck for app
             services.AddHealthChecks(checks =>
             {
