@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using Template.Api.Utils.Dcoumentation.SwaggerGen;
 using Template.Api.Utils.Documentation.SwaggerGen.Extensions;
 using Microsoft.Extensions.HealthChecks;
-using dotnet_etcd;
+using EtcdNet;
 
 namespace Template.Api
 {
@@ -27,7 +27,10 @@ namespace Template.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var _etcdClient = new EtcdClient("etcd", 2379);
+            var __options = new EtcdClientOpitions {
+                Urls = new string[] { "http://etcd:2379" }
+            };
+            EtcdClient etcdClient = new EtcdClient(__options);
 
             // This adds HealthCheck for app
             services.AddHealthChecks(checks =>
@@ -49,9 +52,10 @@ namespace Template.Api
             });
 
             // This configuration enables distributed cache via Redis
-            services.AddDistributedRedisCache(options =>
+            services.AddDistributedRedisCache(async options =>
             {
-                options.Configuration = Configuration.GetConnectionString("RedisConnection");
+                var _redisConnectionString = await etcdClient.GetNodeValueAsync("redisConnectionString");
+                options.Configuration = _redisConnectionString;//Configuration.GetConnectionString("RedisConnection");
                 options.InstanceName = "main";
             });
 

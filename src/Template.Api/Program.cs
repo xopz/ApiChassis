@@ -17,7 +17,7 @@ namespace Template.Api
                 .WriteTo.Console()
                 .WriteTo.Graylog(new GraylogSinkOptions
                 {
-                    HostnameOrAddress = "localhost", //TODO: fix that with appsettings
+                    HostnameOrAddress = "graylog", //TODO: fix that with appsettings
                     Port = 12201 //TODO: fix that with appsettings
                 })
                 .CreateLogger();

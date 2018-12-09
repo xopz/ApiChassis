@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EtcdNet;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Template.Api.Controllers
@@ -12,9 +13,16 @@ namespace Template.Api.Controllers
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            // return new string[] { "value1", "value2" };
+            var __options = new EtcdClientOpitions {
+                Urls = new string[] { "http://etcd:2379" }
+            };
+            EtcdClient etcdClient = new EtcdClient(__options);
+            await etcdClient.CreateNodeAsync("/key", "my value");
+            var _value = await etcdClient.GetNodeValueAsync("/key");
+            return Ok(_value);
         }
 
         // GET api/values/5
