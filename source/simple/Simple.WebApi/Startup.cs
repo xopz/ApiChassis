@@ -27,6 +27,9 @@ namespace Simple.WebApi
         {
             services.AddMvc(options => options.EnableEndpointRouting = true).SetCompatibilityVersion(Latest);
 
+            // Enable Health Checks
+            services.AddHealthChecks();
+
             // Configuring HTTP Response Compression
             services.AddResponseCompression(
                 options =>
@@ -105,6 +108,7 @@ namespace Simple.WebApi
                 app.UseHsts();
             }
 
+            app.UseHealthChecks("/health");
             app.UseResponseCompression();
             app.UseHttpsRedirection();
 
