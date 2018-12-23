@@ -4,3 +4,4 @@
 **/.vscode
 **/.DS_Store
 src/.environment/vagrant/**/.vagrant
+**/*.nupkg
