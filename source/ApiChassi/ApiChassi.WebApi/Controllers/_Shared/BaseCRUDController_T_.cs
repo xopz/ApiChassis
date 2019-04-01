@@ -91,7 +91,13 @@
         }
     }
 
-    public abstract class BaseCRUDController<T> : BaseCRUDController<T, T, T, T, T, T>
-        where T : class, IFindRequestModel, ICreateRequestModel, ICreateResponseModel, IUpdateRequestModel
+    public abstract class BaseCRUDController<TModel, TFindRequestModel, TFindResponseModel> : BaseCRUDController<TModel, TFindRequestModel, TFindResponseModel, TModel, TModel, TModel>
+        where TModel : class, ICreateRequestModel, ICreateResponseModel, IUpdateRequestModel
+        where TFindRequestModel : IFindRequestModel
+    { }
+
+    public abstract class BaseCRUDController<TModel, TFindRequestModel> : BaseCRUDController<TModel, TFindRequestModel, TModel, TModel, TModel, TModel>
+        where TModel : class, ICreateRequestModel, ICreateResponseModel, IUpdateRequestModel
+        where TFindRequestModel: IFindRequestModel
     { }
 }

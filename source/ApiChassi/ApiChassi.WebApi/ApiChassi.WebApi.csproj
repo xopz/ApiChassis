@@ -28,5 +28,11 @@
     <Folder Include="Models\_Shared\Response\" />
     <Folder Include="Models\_Shared\Request\Interfaces\" />
     <Folder Include="Models\_Shared\Response\Interfaces\" />
+    <Folder Include="V1\" />
+    <Folder Include="V2\" />
+    <Folder Include="V1\Controllers\" />
+    <Folder Include="V1\Models\" />
+    <Folder Include="V2\Controllers\" />
+    <Folder Include="V2\Models\" />
   </ItemGroup>
 </Project>

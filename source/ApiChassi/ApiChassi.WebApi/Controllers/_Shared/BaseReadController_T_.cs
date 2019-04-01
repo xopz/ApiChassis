@@ -40,5 +40,8 @@
         }
     }
 
-    public abstract class BaseReadController<T> : BaseReadController<T, T, T> where T: class, IFindRequestModel { }
+    public abstract class BaseReadController<TModel, TFindRequestModel> : BaseReadController<TModel, TFindRequestModel, TModel> 
+        where TModel: class
+        where TFindRequestModel: IFindRequestModel 
+    { }
 }
