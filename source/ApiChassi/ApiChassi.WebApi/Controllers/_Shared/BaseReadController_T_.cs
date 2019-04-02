@@ -1,4 +1,6 @@
-﻿namespace ApiChassi.WebApi.Controllers
+﻿using System.Net.Http;
+using ApiChassi.WebApi.Models._Shared;
+namespace ApiChassi.WebApi.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -14,7 +16,7 @@
 
         protected abstract Task<TGetResponseModel> GetAsync(Guid id);
 
-        protected abstract Task<TFindResponseModel> FindAsync(TFindRequestModel request);
+        protected abstract Task<FindResult<TFindResponseModel>> FindAsync(TFindRequestModel request);
 
         /// <summary>
         /// Gets the list.
@@ -25,10 +27,11 @@
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-
         public virtual async Task<ActionResult<IEnumerable<TFindResponseModel>>> GetList(ApiVersion version, [FromQuery] TFindRequestModel request)
         {
-            return Ok(await FindAsync(request));
+            var _result = await FindAsync(request);
+            Response.Headers.Add("X-Total-Count", _result.TotalCount.ToString());
+            return Ok(_result.Data);
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ using System;
 using System.Reflection;
 using Swashbuckle.AspNetCore.Swagger;
 using ApiChassi.WebApi.Utils.Extensions;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace ApiChassi.WebApi
 {
@@ -36,10 +37,6 @@ namespace ApiChassi.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-
-            services
-                .AddMvc(options => options.EnableEndpointRouting = true)
-                .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddHealthChecks();
 
@@ -69,6 +66,14 @@ namespace ApiChassi.WebApi
                 options.SubstituteApiVersionInUrl = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
             });
+
+            services
+                .AddMvc(options => {
+                    options.EnableEndpointRouting = true;
+                    options.RespectBrowserAcceptHeader = true;
+                })
+                .AddXmlSerializerFormatters()
+                .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddSwaggerGen(options =>
             {

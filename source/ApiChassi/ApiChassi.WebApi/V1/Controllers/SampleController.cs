@@ -1,6 +1,9 @@
-﻿namespace ApiChassi.WebApi.V1.Controllers
+﻿using ApiChassi.WebApi.Models._Shared;
+namespace ApiChassi.WebApi.V1.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using ApiChassi.WebApi.Controllers;
     using ApiChassi.WebApi.V1.Models;
@@ -22,9 +25,13 @@
             return Task.FromResult(true);
         }
 
-        protected override Task<SampleModel> FindAsync(SampleFindRequestModel request)
+        protected override Task<FindResult<SampleModel>> FindAsync(SampleFindRequestModel request)
         {
-            return Task.FromResult(new SampleModel());
+            return Task.FromResult(new FindResult<SampleModel>
+            {
+                Data = new [] { new SampleModel() }.AsEnumerable(),
+                TotalCount = 1
+            });
         }
 
         protected override Task<SampleModel> GetAsync(Guid id)
