@@ -16,6 +16,12 @@
 
         protected abstract Task<TFindResponseModel> FindAsync(TFindRequestModel request);
 
+        /// <summary>
+        /// Gets the list.
+        /// </summary>
+        /// <returns>The list.</returns>
+        /// <param name="version">Version.</param>
+        /// <param name="request">Request.</param>
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
@@ -25,6 +31,12 @@
             return Ok(await FindAsync(request));
         }
 
+        /// <summary>
+        /// Gets an item.
+        /// </summary>
+        /// <returns>The item.</returns>
+        /// <param name="version">Version.</param>
+        /// <param name="id">Identifier.</param>
         [HttpGet("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]

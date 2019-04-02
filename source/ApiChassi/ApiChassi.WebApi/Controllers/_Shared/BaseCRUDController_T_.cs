@@ -28,11 +28,17 @@
 
         protected abstract Task DeleteAsync(TGetResponseModel request);
 
+        /// <summary>
+        /// Creates the specified item.
+        /// </summary>
+        /// <returns>The created item.</returns>
+        /// <param name="apiVersion">API version.</param>
+        /// <param name="item">Item.</param>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-        public virtual async Task<IActionResult> Post(ApiVersion apiVersion, [FromBody] TCreateRequestModel item)
+        public virtual async Task<ActionResult<TCreateResponseModel>> Post(ApiVersion apiVersion, [FromBody] TCreateRequestModel item)
         {
             if (item == null)
             {
@@ -47,6 +53,13 @@
             return Created(_urlString, _item);
         }
 
+        /// <summary>
+        /// Edits the specified item.
+        /// </summary>
+        /// <returns>Success of the operation.</returns>
+        /// <param name="apiVersion">API version.</param>
+        /// <param name="id">Identifier.</param>
+        /// <param name="item">Item.</param>
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
@@ -75,6 +88,12 @@
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes the specified item.
+        /// </summary>
+        /// <returns>Success of the operation.</returns>
+        /// <param name="apiVersion">API version.</param>
+        /// <param name="id">Identifier.</param>
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
