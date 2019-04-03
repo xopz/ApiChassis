@@ -1,4 +1,4 @@
-﻿namespace ApiChassi.WebApi.Models._Shared
+﻿namespace ApiChassi.WebApi.Models
 {
     using System.Collections.Generic;
 

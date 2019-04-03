@@ -1,21 +1,29 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.ResponseCompression;
-using System.IO.Compression;
-using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using System.IO;
-using System;
-using System.Reflection;
-using Swashbuckle.AspNetCore.Swagger;
-using ApiChassi.WebApi.Utils.Extensions;
-using Microsoft.AspNetCore.Mvc.Formatters;
-
+﻿using System.Collections;
 namespace ApiChassi.WebApi
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.AspNetCore.ResponseCompression;
+    using System.IO.Compression;
+    using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
+    using Microsoft.AspNetCore.Mvc.ApiExplorer;
+    using System.IO;
+    using System;
+    using System.Reflection;
+    using Swashbuckle.AspNetCore.Swagger;
+    using ApiChassi.WebApi.Utils.Extensions;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.Formatters;
+    using Microsoft.Net.Http.Headers;
+    using Microsoft.AspNetCore.Http;
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -71,6 +79,12 @@ namespace ApiChassi.WebApi
                 .AddMvc(options => {
                     options.EnableEndpointRouting = true;
                     options.RespectBrowserAcceptHeader = true;
+                    options.OutputFormatters.Insert(0, new HateoasOutputFormatter());
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.Formatting = Formatting.None;
                 })
                 .AddXmlSerializerFormatters()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
@@ -86,6 +100,7 @@ namespace ApiChassi.WebApi
                     }
                 }
                 options.IncludeXmlComments(XmlCommentsFilePath);
+                //options.OperationFilter<HATEOASResponseType>();
             });
 
         }
@@ -140,6 +155,81 @@ namespace ApiChassi.WebApi
             }
 
             return info;
+        }
+    }
+
+    public class HateoasOutputFormatter: TextOutputFormatter
+    {
+        public HateoasOutputFormatter()
+        {
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/json+hateoas"));
+            //SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/xml+hateoas"));
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/json+hateoas"));
+            //SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/xml+hateoas"));
+
+            SupportedEncodings.Add(Encoding.UTF8);
+            SupportedEncodings.Add(Encoding.Unicode);
+        }
+
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+        {
+            var _object = context.Object;
+            object _hateoasObject = null;
+            if (_object is IEnumerable)
+            {
+                _hateoasObject = new HateoasCollection(_object as IEnumerable, "www.google.com");
+            }
+            else
+            {
+                _hateoasObject = new HateoasObject(_object, "www.google.com");
+            }
+            var _serializedData = JsonConvert.SerializeObject(_hateoasObject);
+            await context.HttpContext.Response.WriteAsync(_serializedData);
+        }
+
+        protected override bool CanWriteType(Type type)
+        {
+            return base.CanWriteType(type);
+        }
+    }
+
+    public class Link
+    {
+        public string href { get; set; }
+        public string rel { get; set; }
+        public string method { get; set; }
+    }
+
+    public class HateoasObject
+    {
+        public object Data { get; set; }
+
+        public IEnumerable<Link> _links { get; set; }
+
+        public HateoasObject(object data, string baseUrl)
+        {
+            Data = data;
+            _links = new[]
+            {
+                new Link { rel = "update", method = "PUT", href = $"{baseUrl}/123" },
+                new Link { rel = "delete", method = "DELETE", href = $"{baseUrl}/123" },
+                new Link { rel = "self", method = "GET", href = $"{baseUrl}/123" }
+
+            }.AsEnumerable();
+        }
+    }
+
+    public class HateoasCollection
+    {
+        public List<HateoasObject> Data { get; set; }
+
+        public HateoasCollection(IEnumerable data, string baseUrl)
+        {
+            Data = new List<HateoasObject>();
+            foreach (var obj in data)
+            {
+                Data.Add(new HateoasObject(obj, baseUrl));
+            }
         }
     }
 }

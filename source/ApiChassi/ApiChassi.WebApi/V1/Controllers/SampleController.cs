@@ -1,11 +1,10 @@
-﻿using ApiChassi.WebApi.Models._Shared;
-namespace ApiChassi.WebApi.V1.Controllers
+﻿namespace ApiChassi.WebApi.V1.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using ApiChassi.WebApi.Controllers;
+    using ApiChassi.WebApi.Models;
     using ApiChassi.WebApi.V1.Models;
 
     public class SampleController : BaseCRUDController<SampleModel, SampleFindRequestModel>

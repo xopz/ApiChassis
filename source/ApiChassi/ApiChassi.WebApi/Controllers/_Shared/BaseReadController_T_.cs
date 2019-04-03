@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-using ApiChassi.WebApi.Models._Shared;
-namespace ApiChassi.WebApi.Controllers
+﻿namespace ApiChassi.WebApi.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -8,6 +6,7 @@ namespace ApiChassi.WebApi.Controllers
     using System.Net;
     using System.Threading.Tasks;
     using ApiChassi.WebApi.Models.Request.Interfaces;
+    using ApiChassi.WebApi.Models;
 
     public abstract class BaseReadController<TGetResponseModel, TFindRequestModel, TFindResponseModel> : BaseController
         where TGetResponseModel : class 
