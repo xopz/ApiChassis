@@ -6,6 +6,15 @@ The picked patterns and recomendations are listed bellow.
 
 ## Picked Patterns
 
+Here's a list of patterns already implemented.
+
+| Pattern | Description |
+| ------- | ----------- |
+| **API Chassis** | This project itself is itented to address facilities proposed in [Richardson's Microservices Chassis Pattern](https://microservices.io/patterns/microservice-chassis.html). Choosen of Service API Project type intented to address 12 Factor's topics [VI](https://12factor.net/processes), [VII](https://12factor.net/port-binding) and [VIII](https://12factor.net/concurrency). |
+| **API Metrics** | This project implements healthcheck out of the box via DotNet's 2.2 `app.UseHealthChecks()` |
+| **REST** | This API implements REST guidance on processing request so, it follows [HTTP Specification](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) when sending a response and also follows Microsoft's [recomendantions](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-implementation#processing-requests) |
+| **HATEOAS** | *In progress* This project offers an alternative to request data with links as mentioned on [Web Linking specification](https://tools.ietf.org/html/rfc5988.html) and [recomended](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-implementation#provide-links-to-support-hateoas-style-navigation-and-discovery-of-resources) by Microsoft. |
+
 ## Requirements
 
 ## Build
