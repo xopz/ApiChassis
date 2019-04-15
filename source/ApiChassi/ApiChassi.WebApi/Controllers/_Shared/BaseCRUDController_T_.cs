@@ -34,7 +34,7 @@
         /// <returns>The created item.</returns>
         /// <param name="apiVersion">API version.</param>
         /// <param name="item">Item.</param>
-        [HttpPost]
+        [HttpPost(Name = "create-record")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
@@ -60,7 +60,7 @@
         /// <param name="apiVersion">API version.</param>
         /// <param name="id">Identifier.</param>
         /// <param name="item">Item.</param>
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "update-record")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
@@ -94,7 +94,7 @@
         /// <returns>Success of the operation.</returns>
         /// <param name="apiVersion">API version.</param>
         /// <param name="id">Identifier.</param>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "delete-record")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]

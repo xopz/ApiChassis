@@ -1,5 +1,4 @@
-﻿using System.Collections;
-namespace ApiChassi.WebApi
+﻿namespace ApiChassi.WebApi
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -15,14 +14,9 @@ namespace ApiChassi.WebApi
     using System.Reflection;
     using Swashbuckle.AspNetCore.Swagger;
     using ApiChassi.WebApi.Utils.Extensions;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc.Formatters;
-    using Microsoft.Net.Http.Headers;
-    using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
+    using ApiChassi.WebApi.V1.Models;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class Startup
     {
@@ -79,7 +73,14 @@ namespace ApiChassi.WebApi
                 .AddMvc(options => {
                     options.EnableEndpointRouting = true;
                     options.RespectBrowserAcceptHeader = true;
-                    options.OutputFormatters.Insert(0, new HateoasOutputFormatter());
+                })
+                .AddHateoas(options =>
+                {
+                    options
+                        .AddLink<SampleModel>("update-record", s => new { id = s.Id })
+                        .AddLink<SampleModel>("delete-record", s => new { id = s.Id })
+                        .AddLink<SampleModel>("get-record", s => new { id = s.Id })
+                        .AddLink<IEnumerable<SampleModel>>("create-record");
                 })
                 .AddJsonOptions(options =>
                 {
@@ -158,78 +159,197 @@ namespace ApiChassi.WebApi
         }
     }
 
-    public class HateoasOutputFormatter: TextOutputFormatter
-    {
-        public HateoasOutputFormatter()
-        {
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/json+hateoas"));
-            //SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/xml+hateoas"));
-            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/json+hateoas"));
-            //SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/xml+hateoas"));
+    //public static class IMvcBuilderExtensions
+    //{
+    //    public static IMvcBuilder AddJsonHateoas(this IMvcBuilder builder) {
+    //        builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+    //        builder.AddMvcOptions(o => o.OutputFormatters.Add(new JsonHateoasOutputFormatter()));
+    //        return builder;
+    //    }
+    //}
 
-            SupportedEncodings.Add(Encoding.UTF8);
-            SupportedEncodings.Add(Encoding.Unicode);
-        }
+    //public class JsonHateoasOutputFormatter: TextOutputFormatter
+    //{
+    //    public JsonHateoasOutputFormatter()
+    //    {
+    //        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/json+hateoas"));
+    //        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/json+hateoas"));
 
-        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
-        {
-            var _object = context.Object;
-            object _hateoasObject = null;
-            if (_object is IEnumerable)
-            {
-                _hateoasObject = new HateoasCollection(_object as IEnumerable, "www.google.com");
-            }
-            else
-            {
-                _hateoasObject = new HateoasObject(_object, "www.google.com");
-            }
-            var _serializedData = JsonConvert.SerializeObject(_hateoasObject);
-            await context.HttpContext.Response.WriteAsync(_serializedData);
-        }
+    //        SupportedEncodings.Add(Encoding.UTF8);
+    //        SupportedEncodings.Add(Encoding.Unicode);
+    //    }
 
-        protected override bool CanWriteType(Type type)
-        {
-            return base.CanWriteType(type);
-        }
-    }
+    //    public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+    //    {
+    //        var contextAccessor = GetService<IActionContextAccessor>(context);
+    //        var urlHelperFactory = GetService<IUrlHelperFactory>(context);
+    //        var actionDescriptorProvider = GetService<IActionDescriptorCollectionProvider>(context);
+    //        var urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
 
-    public class Link
-    {
-        public string href { get; set; }
-        public string rel { get; set; }
-        public string method { get; set; }
-    }
+    //        var _object = context.Object;
 
-    public class HateoasObject
-    {
-        public object Data { get; set; }
+    //        var _route = actionDescriptorProvider.ActionDescriptors.Items.FirstOrDefault(i => i.AttributeRouteInfo.Name == "update-record");
+    //        var _method = _route.ActionConstraints.OfType<HttpMethodActionConstraint>().First().HttpMethods.First();
+    //        //var _routeValues = default(object);
+    //        var _options = new RouteValueDictionary((p) => new { id = p.Id });
+    //        var _url = urlHelper.Link("update-record", _route.route).ToLowerInvariant();
 
-        public IEnumerable<Link> _links { get; set; }
 
-        public HateoasObject(object data, string baseUrl)
-        {
-            Data = data;
-            _links = new[]
-            {
-                new Link { rel = "update", method = "PUT", href = $"{baseUrl}/123" },
-                new Link { rel = "delete", method = "DELETE", href = $"{baseUrl}/123" },
-                new Link { rel = "self", method = "GET", href = $"{baseUrl}/123" }
+    //        var _result = _object is IEnumerable ? 
+    //            CreateHateoasCollection(_object as IEnumerable, actionDescriptorProvider) : 
+    //            CreateHateoasObject(_object, actionDescriptorProvider);
 
-            }.AsEnumerable();
-        }
-    }
+    //        string _serializedData = JsonConvert.SerializeObject(_result);
+    //        await context.HttpContext.Response.WriteAsync(_serializedData);
+    //    }
 
-    public class HateoasCollection
-    {
-        public List<HateoasObject> Data { get; set; }
+    //    protected override bool CanWriteType(Type type)
+    //    {
+    //        return base.CanWriteType(type);
+    //    }
 
-        public HateoasCollection(IEnumerable data, string baseUrl)
-        {
-            Data = new List<HateoasObject>();
-            foreach (var obj in data)
-            {
-                Data.Add(new HateoasObject(obj, baseUrl));
-            }
-        }
-    }
+    //    private T GetService<T>(OutputFormatterWriteContext context)
+    //    {
+    //        return (T)context.HttpContext.RequestServices.GetService(typeof(T));
+    //    }
+
+    //    private ExpandoObject CreateHateoasObject(object o, IActionDescriptorCollectionProvider actionDescriptorCollection)
+    //    {
+    //        dynamic _r = new ExpandoObject();
+    //        foreach (var property in o.GetType().GetProperties())
+    //        {
+    //            if (property.CanRead)
+    //            {
+    //                (_r as IDictionary<string, object>).Add(property.Name, property.GetValue(o));
+    //            }
+    //        }
+    //        _r._links = new List<Link> {
+    //                Link.Self(o),
+    //                Link.Update(o),
+    //                Link.Delete(o)
+    //        };
+    //        return _r;
+    //    }
+
+    //    private ExpandoObject CreateHateoasCollection(IEnumerable o, IActionDescriptorCollectionProvider actionDescriptorCollection)
+    //    {
+    //        dynamic _object = new ExpandoObject();
+    //        _object.data = o.Select(s => CreateHateoasObject(s, actionDescriptorCollection));
+    //        _object._links = new List<Link> {
+    //            Link.FirstPage(10, 0, 1),
+    //            new Link { rel = "previous-page"},
+    //            new Link { rel = "next-page"},
+    //            Link.LastPage(10, 0, 1),
+    //        };
+    //        return _object;
+    //    }
+    //}
+
+    //public class Link
+    //{
+    //    public string href { get; set; }
+    //    public string rel { get; set; }
+    //    public string method { get; set; }
+
+    //    public static Link Self<T>(T obj)
+    //    {
+    //        return new Link
+    //        {
+    //            rel = "self",
+    //            method = "GET",
+    //            href = $"http://xopz.net/{1}"
+    //        };
+    //    }
+
+    //    public static Link Update<T>(T obj)
+    //    {
+    //        return new Link
+    //        {
+    //            rel = "update-record",
+    //            method = "PUT",
+    //            href = $"http://xopz.net/{1}"
+    //        };
+    //    }
+
+    //    public static Link Delete<T>(T obj)
+    //    {
+    //        return new Link
+    //        {
+    //            rel = "delete-record",
+    //            method = "DELETE",
+    //            href = $"http://xopz.net/{1}"
+    //        };
+    //    }
+
+    //    public static Link FirstPage(short currentLimit, int currentOffset, int totalRecords)
+    //    {
+    //        return new Link
+    //        {
+    //            rel = "first-page",
+    //            method = "GET",
+    //            href = $"http://xopz.net/?_limit={currentLimit}"
+    //        };
+    //    }
+
+    //    //public static Link PreviousPage(short currentLimit, int currentOffset, int totalRecords)
+    //    //{
+
+    //    //}
+
+    //    //public static Link NextPage(short currentLimit, int currentOffset, int totalRecords)
+    //    //{
+
+    //    //}
+
+    //    public static Link LastPage(short currentLimit, int currentOffset, int totalRecords)
+    //    {
+    //        return new Link
+    //        {
+    //            rel = "last-page",
+    //            method = "GET",
+    //            href = $"http://xopz.net/?_limit={currentLimit}&_offset={Math.Ceiling((double)(totalRecords / currentLimit))}"
+    //        };
+    //    }
+    //}
+
+    //public class HateoasObject : Expando
+    //{
+    //    public IEnumerable<Link> _links { get; set; }
+
+    //    public HateoasObject(object data, string baseUrl) : base(data)
+    //    {
+    //        //this.SetProperty(this, "_links", new[]
+    //        //{
+    //        //    new Link { rel = "update", method = "PUT", href = $"{baseUrl}/123" },
+    //        //    new Link { rel = "delete", method = "DELETE", href = $"{baseUrl}/123" },
+    //        //    new Link { rel = "self", method = "GET", href = $"{baseUrl}/123" }
+
+    //        //}.AsEnumerable());
+    //    }
+    //}
+
+    //public class HateoasCollection
+    //{
+    //    public List<HateoasObject> Data { get; set; }
+
+    //    public IEnumerable<Link> _links { get; set; }
+
+    //    public HateoasCollection(IEnumerable data, string baseUrl)
+    //    {
+    //        Data = new List<HateoasObject>();
+    //        foreach (var obj in data)
+    //        {
+    //            dynamic dobj = new HateoasObject(obj, baseUrl);
+    //            dobj._links = new[]
+    //            {
+    //                new Link { rel = "update", method = "PUT", href = $"{baseUrl}/123" },
+    //                new Link { rel = "delete", method = "DELETE", href = $"{baseUrl}/123" },
+    //                new Link { rel = "self", method = "GET", href = $"{baseUrl}/123" }
+
+    //            }.AsEnumerable();
+
+    //            Data.Add(dobj);
+    //        }
+    //    }
+    //}
 }

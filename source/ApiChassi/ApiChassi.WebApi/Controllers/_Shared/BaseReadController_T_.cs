@@ -39,7 +39,7 @@
         /// <returns>The item.</returns>
         /// <param name="version">Version.</param>
         /// <param name="id">Identifier.</param>
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "get-record")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]

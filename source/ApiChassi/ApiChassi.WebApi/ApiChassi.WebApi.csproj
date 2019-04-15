@@ -34,5 +34,10 @@
     <Folder Include="V1\Models\" />
     <Folder Include="V2\Controllers\" />
     <Folder Include="V2\Models\" />
+    <Folder Include="Utils\Formatters\" />
+    <Folder Include="Utils\Formatters\Hateoas\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Utils\Expando.cs" />
   </ItemGroup>
 </Project>
