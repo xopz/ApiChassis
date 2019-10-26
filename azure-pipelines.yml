@@ -6,13 +6,14 @@ pool:
 
 container: mcr.microsoft.com/dotnet/core/sdk:2.2
 
+variables:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
 steps:
   - script: |
-      ls -la
-      dotnet restore
-      dotnet build
+      dotnet build ./source/ApiChassi/ApiChassi.sln
     displayName: "Build"
 
   - script: |
-      dotnet test
+      dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover ./source/ApiChassi/ApiChassi.sln
     displayName: "Unit Test"
