@@ -8,6 +8,7 @@ container: mcr.microsoft.com/dotnet/core/sdk:2.2
 
 steps:
   - script: |
+      ls -la
       dotnet restore
       dotnet build
     displayName: "Build"
