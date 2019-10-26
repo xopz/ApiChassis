@@ -1,14 +1,17 @@
-trigger:
-- master
+# trigger:
+# - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
+
+container: cr.microsoft.com/dotnet/core/sdk:2.2
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - script: |
+      dotnet restore
+      dotnet build
+    displayName: "Build"
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - script: |
+      dotnet test
+    displayName: "Unit Test"
