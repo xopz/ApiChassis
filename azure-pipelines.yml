@@ -4,7 +4,7 @@
 pool:
   vmImage: "ubuntu-latest"
 
-container: cr.microsoft.com/dotnet/core/sdk:2.2
+container: mcr.microsoft.com/dotnet/core/sdk:2.2
 
 steps:
   - script: |
