@@ -22,9 +22,6 @@ steps:
     inputs:
       versionSpec: 
 
-  - task: NuGetAuthenticate@0
-    inputs:
-
   - task: NuGetCommand@2
     inputs:
       command: 'pack'
