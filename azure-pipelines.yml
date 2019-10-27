@@ -17,3 +17,19 @@ steps:
   - script: |
       dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover ./source/ApiChassi/ApiChassi.sln
     displayName: "Unit Test"
+
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: 
+
+  - task: NuGetAuthenticate@0
+    inputs:
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: './.nuget/XopzApiTemplate.nuspec'
+      configuration: 
+      packDestination: 
+      versioningScheme: 'off'
+      basePath: '.'
