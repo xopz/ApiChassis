@@ -4,10 +4,10 @@
 pool:
   vmImage: "vs2017-win2016"
 
-container: mcr.microsoft.com/dotnet/core/sdk:2.2
+# container: mcr.microsoft.com/dotnet/core/sdk:2.2
 
-variables:
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+# variables:
+#   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 steps:
   - script: |
