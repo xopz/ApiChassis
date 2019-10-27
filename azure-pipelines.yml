@@ -24,6 +24,7 @@ steps:
 
   - task: NuGetAuthenticate@0
     inputs:
+      nuGetServiceConnections: 'XopzTeamNugetServiceConnection'
 
   - task: NuGetCommand@2
     inputs:
