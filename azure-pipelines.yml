@@ -30,3 +30,10 @@ steps:
       packDestination: 
       versioningScheme: 'off'
       basePath: '.'
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'XopzTeamNugetServiceConnection'
