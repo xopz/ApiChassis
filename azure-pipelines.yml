@@ -2,7 +2,7 @@
 # - master
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: "vs2017-win2016"
 
 container: mcr.microsoft.com/dotnet/core/sdk:2.2
 
