@@ -36,11 +36,21 @@ namespace AspNetCore.Hateoas.Infrastructure
         /// </summary>
         public Type ResourceType { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public RouteValueDictionary GetRouteValues(object input)
         {
             return _valuesSelector((T)input);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public bool IsLinkAllowed(object input)
         {
             return _isLinkAllowed == null || _isLinkAllowed((T)input);

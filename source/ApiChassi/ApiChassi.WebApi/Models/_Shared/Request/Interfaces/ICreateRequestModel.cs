@@ -10,7 +10,6 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <value></value>
         Guid Id { get; set; }
     }
 }
