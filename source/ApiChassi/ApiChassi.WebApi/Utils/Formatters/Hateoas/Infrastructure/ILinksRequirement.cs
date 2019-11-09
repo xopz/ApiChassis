@@ -3,12 +3,33 @@ using Microsoft.AspNetCore.Routing;
 
 namespace AspNetCore.Hateoas.Infrastructure
 {
-	public interface ILinksRequirement
-	{
-		string Name { get; }
-		Type ResourceType { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ILinksRequirement
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        string Name { get; }
 
-		RouteValueDictionary GetRouteValues(object input);
-		bool IsLinkAllowed(object input);
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        Type ResourceType { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        RouteValueDictionary GetRouteValues(object input);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        bool IsLinkAllowed(object input);
+    }
 }

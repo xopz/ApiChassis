@@ -8,13 +8,26 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Server.Kestrel.Core;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static class IApplicationBuilderExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseHealthChecks(this IApplicationBuilder app)
         {
             return app.UseHealthChecks("/health");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseJsonExceptionHandler(this IApplicationBuilder app)
         {
             app.Run(async context => await Task.Run(() =>

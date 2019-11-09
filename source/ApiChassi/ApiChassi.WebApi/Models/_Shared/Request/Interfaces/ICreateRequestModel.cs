@@ -2,8 +2,15 @@
 {
     using System;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public interface ICreateRequestModel
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
         Guid Id { get; set; }
     }
 }

@@ -7,6 +7,9 @@
     using System;
     using Serilog;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Program
     {
         static IConfiguration Configuration { get; } = new ConfigurationBuilder()
@@ -16,6 +19,11 @@
             .AddEnvironmentVariables()
             .Build();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -41,6 +49,11 @@
             return -1;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()

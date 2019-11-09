@@ -7,25 +7,54 @@
     using ApiChassi.WebApi.Models.Request.Interfaces;
     using ApiChassi.WebApi.Models.Response.Interfaces;
 
+    /// <summary>
+    /// Abstract Controller base for Create, Read, Update and Delete operations
+    /// </summary>
+    /// <typeparam name="TGetResponseModel">Type for Get responses</typeparam>
+    /// <typeparam name="TFindRequestModel">Type for Find requests</typeparam>
+    /// <typeparam name="TFindResponseModel">Type for Find responses</typeparam>
+    /// <typeparam name="TCreateRequestModel">Type for Post requests</typeparam>
+    /// <typeparam name="TCreateResponseModel">Type for Post responses</typeparam>
+    /// <typeparam name="TUpdateRequestModel">Type for Put requests</typeparam>
     public abstract class BaseCRUDController<
-        TGetResponseModel, 
-        TFindRequestModel, 
-        TFindResponseModel, 
+        TGetResponseModel,
+        TFindRequestModel,
+        TFindResponseModel,
         TCreateRequestModel,
         TCreateResponseModel,
         TUpdateRequestModel> : BaseReadController<TGetResponseModel, TFindRequestModel, TFindResponseModel>
-        where TGetResponseModel: class
-        where TFindRequestModel:  IFindRequestModel
-        where TCreateRequestModel: class, ICreateRequestModel
-        where TCreateResponseModel: class, ICreateResponseModel
-        where TUpdateRequestModel: class, IUpdateRequestModel
+        where TGetResponseModel : class
+        where TFindRequestModel : IFindRequestModel
+        where TCreateRequestModel : class, ICreateRequestModel
+        where TCreateResponseModel : class, ICreateResponseModel
+        where TUpdateRequestModel : class, IUpdateRequestModel
     {
+        /// <summary>
+        /// Check if an entry exists on persistence store
+        /// </summary>
+        /// <param name="id">The reference Id for record</param>
+        /// <returns>Sucess on finding the record</returns>
         protected abstract Task<bool> ExistsAsync(Guid id);
 
+        /// <summary>
+        /// Creates a record against persistence store
+        /// </summary>
+        /// <param name="request">The data to be recorded</param>
+        /// <returns>Success on writing against persistence store</returns>
         protected abstract Task<TCreateResponseModel> CreateAsync(TCreateRequestModel request);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected abstract Task UpdateAsync(TUpdateRequestModel request);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected abstract Task DeleteAsync(TGetResponseModel request);
 
         /// <summary>
@@ -110,13 +139,24 @@
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    /// <typeparam name="TFindRequestModel"></typeparam>
+    /// <typeparam name="TFindResponseModel"></typeparam>
     public abstract class BaseCRUDController<TModel, TFindRequestModel, TFindResponseModel> : BaseCRUDController<TModel, TFindRequestModel, TFindResponseModel, TModel, TModel, TModel>
         where TModel : class, ICreateRequestModel, ICreateResponseModel, IUpdateRequestModel
         where TFindRequestModel : IFindRequestModel
     { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    /// <typeparam name="TFindRequestModel"></typeparam>
     public abstract class BaseCRUDController<TModel, TFindRequestModel> : BaseCRUDController<TModel, TFindRequestModel, TModel, TModel, TModel, TModel>
         where TModel : class, ICreateRequestModel, ICreateResponseModel, IUpdateRequestModel
-        where TFindRequestModel: IFindRequestModel
+        where TFindRequestModel : IFindRequestModel
     { }
 }

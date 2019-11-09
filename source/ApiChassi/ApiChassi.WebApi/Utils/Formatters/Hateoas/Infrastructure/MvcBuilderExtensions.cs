@@ -9,22 +9,31 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-	public static class MvcBuilderExtensions
-	{
-		public static IMvcBuilder AddHateoas(this IMvcBuilder builder, Action<HateoasOptions> options = null)
-		{
-			if (options != null) builder.Services.Configure(options);
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class MvcBuilderExtensions
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static IMvcBuilder AddHateoas(this IMvcBuilder builder, Action<HateoasOptions> options = null)
+        {
+            if (options != null) builder.Services.Configure(options);
 
-			builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			builder.Services.TryAdd(ServiceDescriptor
-				.Singleton(serviceProvider => new JsonHateoasOutputFormatter(
-					serviceProvider.GetRequiredService<IOptions<MvcJsonOptions>>().Value.SerializerSettings,
-					serviceProvider.GetRequiredService<ArrayPool<char>>()))
-			);
+            builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            builder.Services.TryAdd(ServiceDescriptor
+                .Singleton(serviceProvider => new JsonHateoasOutputFormatter(
+                    serviceProvider.GetRequiredService<IOptions<MvcJsonOptions>>().Value.SerializerSettings,
+                    serviceProvider.GetRequiredService<ArrayPool<char>>()))
+            );
 
-			builder.Services.TryAddEnumerable(ServiceDescriptor
-				.Transient<IConfigureOptions<MvcOptions>, JsonHateoasMvcOptionsSetup>());
-			return builder;
-		}
-	}
+            builder.Services.TryAddEnumerable(ServiceDescriptor
+                .Transient<IConfigureOptions<MvcOptions>, JsonHateoasMvcOptionsSetup>());
+            return builder;
+        }
+    }
 }

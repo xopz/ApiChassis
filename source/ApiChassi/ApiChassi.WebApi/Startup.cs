@@ -70,7 +70,8 @@
             });
 
             services
-                .AddMvc(options => {
+                .AddMvc(options =>
+                {
                     options.EnableEndpointRouting = true;
                     options.RespectBrowserAcceptHeader = true;
                 })
@@ -145,8 +146,8 @@
                 Title = "Sample API",
                 Version = description.ApiVersion.ToString(),
                 Description = "A sample application with Swagger, Swashbuckle, and API versioning.",
-                Contact = new Contact { Name = "Bill Mei", Email = "murilobeltrame@somewhere.com" },
-                TermsOfService = "Shareware",
+                Contact = new Contact { Name = "Murilo Beltrame", Email = "murilobeltrame@somewhere.com" },
+                TermsOfService = "Freeware",
                 License = new License { Name = "MIT", Url = "https://opensource.org/licenses/MIT" }
             };
 

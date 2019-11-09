@@ -1,7 +1,7 @@
 ﻿namespace ApiChassi.WebApi.Utils.Extensions
 {
-    public static class IMvcBuilderExtensions
-    {
-
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class IMvcBuilderExtensions { }
 }

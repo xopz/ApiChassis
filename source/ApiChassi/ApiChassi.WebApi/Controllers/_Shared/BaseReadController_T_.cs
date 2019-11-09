@@ -8,13 +8,29 @@
     using ApiChassi.WebApi.Models.Request.Interfaces;
     using ApiChassi.WebApi.Models;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TGetResponseModel"></typeparam>
+    /// <typeparam name="TFindRequestModel"></typeparam>
+    /// <typeparam name="TFindResponseModel"></typeparam>
     public abstract class BaseReadController<TGetResponseModel, TFindRequestModel, TFindResponseModel> : BaseController
-        where TGetResponseModel : class 
-        where TFindRequestModel: IFindRequestModel
+        where TGetResponseModel : class
+        where TFindRequestModel : IFindRequestModel
     {
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         protected abstract Task<TGetResponseModel> GetAsync(Guid id);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected abstract Task<FindResult<TFindResponseModel>> FindAsync(TFindRequestModel request);
 
         /// <summary>
@@ -54,8 +70,13 @@
         }
     }
 
-    public abstract class BaseReadController<TModel, TFindRequestModel> : BaseReadController<TModel, TFindRequestModel, TModel> 
-        where TModel: class
-        where TFindRequestModel: IFindRequestModel 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    /// <typeparam name="TFindRequestModel"></typeparam>
+    public abstract class BaseReadController<TModel, TFindRequestModel> : BaseReadController<TModel, TFindRequestModel, TModel>
+        where TModel : class
+        where TFindRequestModel : IFindRequestModel
     { }
 }
