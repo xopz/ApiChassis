@@ -18,8 +18,15 @@
     using ApiChassi.WebApi.V1.Models;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,41 +40,52 @@
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            //Add CORS
             services.AddCors();
 
+            //Add HealthCheck endpoint
             services.AddHealthChecks();
 
+            //Add HTTP Compression
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<BrotliCompressionProvider>();
                 options.Providers.Add<GzipCompressionProvider>();
             });
-            services.Configure<BrotliCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Fastest;
-            });
-            services.Configure<GzipCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Fastest;
-            });
+            services.Configure<BrotliCompressionProviderOptions>(o => { o.Level = CompressionLevel.Fastest; });
+            services.Configure<GzipCompressionProviderOptions>(o => { o.Level = CompressionLevel.Fastest; });
 
+            //Add API Versioning and Version Explorer
             services.AddApiVersioning(options =>
             {
+                // reporting api versions will return the headers "api-supported-versions" and "api-deprecated-versions"
                 options.ReportApiVersions = true;
+                // automatically applies an api version based on the name of the defining controller's namespace
                 options.Conventions.Add(new VersionByNamespaceConvention());
                 options.AssumeDefaultVersionWhenUnspecified = true;
             });
             services.AddVersionedApiExplorer(options =>
             {
+                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+                // note: the specified format code will format the version as "'v'major[.minor][-status]"
                 options.GroupNameFormat = "'v'VVV";
+                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+                // can also be used to control the format of the API version in route templates
                 options.SubstituteApiVersionInUrl = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
             });
+
 
             services
                 .AddMvc(options =>
@@ -91,11 +109,16 @@
                 .AddXmlSerializerFormatters()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
+            //Add Swagger documentation GUI
             services.AddSwaggerGen(options =>
             {
+                // resolve the IApiVersionDescriptionProvider service
+                // note: that we have to build a temporary service provider here because one has not been created yet
                 using (var serviceProvider = services.BuildServiceProvider())
                 {
                     var _provider = serviceProvider.GetRequiredService<IApiVersionDescriptionProvider>();
+                    // add a swagger document for each discovered API version
+                    // note: you might choose to skip or document deprecated API versions differently
                     foreach (var _description in _provider.ApiVersionDescriptions)
                     {
                         options.SwaggerDoc(_description.GroupName, CreateInfoForApiVersion(_description));
@@ -107,7 +130,12 @@
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <param name="provider"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
@@ -159,198 +187,4 @@
             return info;
         }
     }
-
-    //public static class IMvcBuilderExtensions
-    //{
-    //    public static IMvcBuilder AddJsonHateoas(this IMvcBuilder builder) {
-    //        builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-    //        builder.AddMvcOptions(o => o.OutputFormatters.Add(new JsonHateoasOutputFormatter()));
-    //        return builder;
-    //    }
-    //}
-
-    //public class JsonHateoasOutputFormatter: TextOutputFormatter
-    //{
-    //    public JsonHateoasOutputFormatter()
-    //    {
-    //        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/json+hateoas"));
-    //        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/json+hateoas"));
-
-    //        SupportedEncodings.Add(Encoding.UTF8);
-    //        SupportedEncodings.Add(Encoding.Unicode);
-    //    }
-
-    //    public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
-    //    {
-    //        var contextAccessor = GetService<IActionContextAccessor>(context);
-    //        var urlHelperFactory = GetService<IUrlHelperFactory>(context);
-    //        var actionDescriptorProvider = GetService<IActionDescriptorCollectionProvider>(context);
-    //        var urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
-
-    //        var _object = context.Object;
-
-    //        var _route = actionDescriptorProvider.ActionDescriptors.Items.FirstOrDefault(i => i.AttributeRouteInfo.Name == "update-record");
-    //        var _method = _route.ActionConstraints.OfType<HttpMethodActionConstraint>().First().HttpMethods.First();
-    //        //var _routeValues = default(object);
-    //        var _options = new RouteValueDictionary((p) => new { id = p.Id });
-    //        var _url = urlHelper.Link("update-record", _route.route).ToLowerInvariant();
-
-
-    //        var _result = _object is IEnumerable ? 
-    //            CreateHateoasCollection(_object as IEnumerable, actionDescriptorProvider) : 
-    //            CreateHateoasObject(_object, actionDescriptorProvider);
-
-    //        string _serializedData = JsonConvert.SerializeObject(_result);
-    //        await context.HttpContext.Response.WriteAsync(_serializedData);
-    //    }
-
-    //    protected override bool CanWriteType(Type type)
-    //    {
-    //        return base.CanWriteType(type);
-    //    }
-
-    //    private T GetService<T>(OutputFormatterWriteContext context)
-    //    {
-    //        return (T)context.HttpContext.RequestServices.GetService(typeof(T));
-    //    }
-
-    //    private ExpandoObject CreateHateoasObject(object o, IActionDescriptorCollectionProvider actionDescriptorCollection)
-    //    {
-    //        dynamic _r = new ExpandoObject();
-    //        foreach (var property in o.GetType().GetProperties())
-    //        {
-    //            if (property.CanRead)
-    //            {
-    //                (_r as IDictionary<string, object>).Add(property.Name, property.GetValue(o));
-    //            }
-    //        }
-    //        _r._links = new List<Link> {
-    //                Link.Self(o),
-    //                Link.Update(o),
-    //                Link.Delete(o)
-    //        };
-    //        return _r;
-    //    }
-
-    //    private ExpandoObject CreateHateoasCollection(IEnumerable o, IActionDescriptorCollectionProvider actionDescriptorCollection)
-    //    {
-    //        dynamic _object = new ExpandoObject();
-    //        _object.data = o.Select(s => CreateHateoasObject(s, actionDescriptorCollection));
-    //        _object._links = new List<Link> {
-    //            Link.FirstPage(10, 0, 1),
-    //            new Link { rel = "previous-page"},
-    //            new Link { rel = "next-page"},
-    //            Link.LastPage(10, 0, 1),
-    //        };
-    //        return _object;
-    //    }
-    //}
-
-    //public class Link
-    //{
-    //    public string href { get; set; }
-    //    public string rel { get; set; }
-    //    public string method { get; set; }
-
-    //    public static Link Self<T>(T obj)
-    //    {
-    //        return new Link
-    //        {
-    //            rel = "self",
-    //            method = "GET",
-    //            href = $"http://xopz.net/{1}"
-    //        };
-    //    }
-
-    //    public static Link Update<T>(T obj)
-    //    {
-    //        return new Link
-    //        {
-    //            rel = "update-record",
-    //            method = "PUT",
-    //            href = $"http://xopz.net/{1}"
-    //        };
-    //    }
-
-    //    public static Link Delete<T>(T obj)
-    //    {
-    //        return new Link
-    //        {
-    //            rel = "delete-record",
-    //            method = "DELETE",
-    //            href = $"http://xopz.net/{1}"
-    //        };
-    //    }
-
-    //    public static Link FirstPage(short currentLimit, int currentOffset, int totalRecords)
-    //    {
-    //        return new Link
-    //        {
-    //            rel = "first-page",
-    //            method = "GET",
-    //            href = $"http://xopz.net/?_limit={currentLimit}"
-    //        };
-    //    }
-
-    //    //public static Link PreviousPage(short currentLimit, int currentOffset, int totalRecords)
-    //    //{
-
-    //    //}
-
-    //    //public static Link NextPage(short currentLimit, int currentOffset, int totalRecords)
-    //    //{
-
-    //    //}
-
-    //    public static Link LastPage(short currentLimit, int currentOffset, int totalRecords)
-    //    {
-    //        return new Link
-    //        {
-    //            rel = "last-page",
-    //            method = "GET",
-    //            href = $"http://xopz.net/?_limit={currentLimit}&_offset={Math.Ceiling((double)(totalRecords / currentLimit))}"
-    //        };
-    //    }
-    //}
-
-    //public class HateoasObject : Expando
-    //{
-    //    public IEnumerable<Link> _links { get; set; }
-
-    //    public HateoasObject(object data, string baseUrl) : base(data)
-    //    {
-    //        //this.SetProperty(this, "_links", new[]
-    //        //{
-    //        //    new Link { rel = "update", method = "PUT", href = $"{baseUrl}/123" },
-    //        //    new Link { rel = "delete", method = "DELETE", href = $"{baseUrl}/123" },
-    //        //    new Link { rel = "self", method = "GET", href = $"{baseUrl}/123" }
-
-    //        //}.AsEnumerable());
-    //    }
-    //}
-
-    //public class HateoasCollection
-    //{
-    //    public List<HateoasObject> Data { get; set; }
-
-    //    public IEnumerable<Link> _links { get; set; }
-
-    //    public HateoasCollection(IEnumerable data, string baseUrl)
-    //    {
-    //        Data = new List<HateoasObject>();
-    //        foreach (var obj in data)
-    //        {
-    //            dynamic dobj = new HateoasObject(obj, baseUrl);
-    //            dobj._links = new[]
-    //            {
-    //                new Link { rel = "update", method = "PUT", href = $"{baseUrl}/123" },
-    //                new Link { rel = "delete", method = "DELETE", href = $"{baseUrl}/123" },
-    //                new Link { rel = "self", method = "GET", href = $"{baseUrl}/123" }
-
-    //            }.AsEnumerable();
-
-    //            Data.Add(dobj);
-    //        }
-    //    }
-    //}
 }

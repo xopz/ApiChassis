@@ -6,6 +6,7 @@
     using System.IO;
     using System;
     using Serilog;
+    using ApiChassi.WebApi.Utils.Extensions;
 
     /// <summary>
     /// 
@@ -23,30 +24,14 @@
         /// 
         /// </summary>
         /// <param name="args"></param>
-        /// <returns></returns>
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .CreateLogger();
+            CreateWebHostBuilder(args).Build().Run();
 
-            try
-            {
-                Log.Information("Starting web host.");
-                CreateWebHostBuilder(args).Build().Run();
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly.");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-            return -1;
+            // Finaliza o Serilog, executando flush de eventuais operações que estejam pendentes antes
+            // que a aplicação finalize sua execução
+            Log.Information("Shutting down web host. Closing and flushing Serilog");
+            Log.CloseAndFlush();
         }
 
         /// <summary>
@@ -58,6 +43,6 @@
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(Configuration)
-                .UseSerilog();
+                .UseSerilog(Configuration);
     }
 }
