@@ -33,7 +33,22 @@ This template and implementation is based on .Net Core 2.2 so it`s required to h
 
 ### Build the Sample API
 
+The avaliable solutions will be inside `source` folder.
+Each solution should be able to be opened on Visual Studio or Code for editing, compiling and debuging.
+To build the current project from command line use the follwing command:
+
+```sh
+dotnet build ./source/ApiChassi/ApiChassi.sln
+```
+
 ### Run test set
+
+The projects should be provived with a basic set of unit test and they`re included on template.
+They can also be executed stand alone with the following command:
+
+```sh
+dotnet test ./source/ApiChassi/ApiChassi.sln
+```
 
 ### Build the Nuget Package
 
