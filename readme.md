@@ -2,7 +2,15 @@
 
 This project intent to create a basic ASP.Net Core WebApi Chassis to rampup API development task implementing patterns listed on [Heroku's 12Factor](https://12factor.net/), [Richardson's Microservices.io](https://microservices.io/patterns/index.html), [OpenAPI Specification](https://swagger.io/specification/) and also Microsoft's [implementation](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-implementation) and [design](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design) recomendations.
 It's created around .Net Core 2.2 Framework and is prepared to run on Docker stack alongside tools like Configuration Management, Logging and Caching.
-The picked patterns and recomendations are listed bellow.
+
+## Install and Run
+
+The install and run the latest stable version of this template just run the folowing commands:
+
+```sh
+dotnet new install Xopz.Templates.Api
+dotnet new apichassis --name MyApi
+```
 
 ## Picked Patterns
 
@@ -23,7 +31,17 @@ This template and implementation is based on .Net Core 2.2 so it`s required to h
 
 ## Build
 
+### Build the Sample API
+
+### Run test set
+
+### Build the Nuget Package
+
 ## Run
+
+### Install Nuget package locally
+
+### Install from Nuget.org
 
 ## Colaborate
 

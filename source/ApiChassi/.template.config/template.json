@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "XOPZ",
+    "classifications": [
+        "Web",
+        "WebAPI",
+        "Tests",
+        "xUnit"
+    ],
+    "name": "XOPZ: Chassis para WebAPI em .Net Core",
+    "identity": "Xopz.Templates.Api",
+    "groupIdentity": "Xopz.Templates.Api",
+    "shortName": "apichassis",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    },
+    "sourceName": "ApiChassi",
+    "preferNameDirectory": true
+}
