@@ -1,0 +1,1 @@
+docker run --rm -it -v $(pwd):/src  nuget bash -c "nuget pack /src/.nuget/*.nuspec -BasePath /src && mv *.nupkg /src"

@@ -1,0 +1,1 @@
+docker build -t nuget -f ./.environment/docker/Nuget.Dockerfile ./.environment/docker
