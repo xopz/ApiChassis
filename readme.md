@@ -37,6 +37,18 @@ This template and implementation is based on .Net Core 2.2 so it`s required to h
 
 ### Build the Nuget Package
 
+To build the Nuget package we choose to use Docker images.
+Theres a predefined scripts to help to build the required Nuget tool Docker image and to pack the Nuget as an template.
+To make and build locally (even on Linux or macOS):
+
+```sh
+# EXECUTE THE FOLLOWING COMMANDS AT THE ROOT FOLDER
+# CREATES A DOCKER IMAGE LOCALLY TO PACK THE SOURCE
+./.environment/scripts/make_nuget.cmd
+# CREATES THE NUPKG
+./.environment/script/make_package.cmd
+```
+
 ## Run
 
 ### Install Nuget package locally
