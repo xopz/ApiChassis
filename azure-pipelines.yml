@@ -26,7 +26,10 @@ steps:
     inputs:
       command: 'pack'
       packagesToPack: './.nuget/XopzApiTemplate.nuspec'
-      versioningScheme: 'off'
+      versioningScheme: 'byPrereleaseNumber'
+      majorVersion: '0'
+      minorVersion: '0'
+      patchVersion: '1'
       basePath: '.'
 
   - task: NuGetCommand@2
