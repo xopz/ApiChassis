@@ -53,7 +53,7 @@ dotnet test ./source/ApiChassi/ApiChassi.sln
 ### Build the Nuget Package
 
 To build the Nuget package we choose to use Docker images.
-Theres a predefined scripts to help to build the required Nuget tool Docker image and to pack the Nuget as an template.
+There's a predefined scripts to help to build the required Nuget tool Docker image and to pack the Nuget as an template.
 To make and build locally (even on Linux or macOS):
 
 ```sh
@@ -68,7 +68,23 @@ To make and build locally (even on Linux or macOS):
 
 ### Install Nuget package locally
 
-### Install from Nuget.org
+For local tests it's possible to install the `nupkg` file from folder. To do that, execute the following command:
+
+```sh
+dotnet new --install ./Xopz.Templates.Api.0.0.1.nupkg
+# CHECK INSTALLED TEMPLATES
+dotnet new --list | grep XOPZ
+# CREATE SOLUTION FROM TEMPLATE
+dotnet new apichassis --name MyApi
+```
+
+### Uninstall the template
+
+To remove the installed template - from Nuget.org or locally - use:
+
+```sh
+dotnet new --uninstall Xopz.Templates.Api
+```
 
 ## Colaborate
 
