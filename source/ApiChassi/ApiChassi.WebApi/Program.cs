@@ -1,48 +1,26 @@
-﻿namespace ApiChassi.WebApi
-{
-    using Microsoft.AspNetCore;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using System.IO;
-    using System;
-    using Serilog;
-    using ApiChassi.WebApi.Utils.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-    /// <summary>
-    /// 
-    /// </summary>
+namespace ApiChassi.WebApi
+{
     public class Program
     {
-        static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", false, true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
-            .AddEnvironmentVariables()
-            .Build();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-
-            // Finaliza o Serilog, executando flush de eventuais operações que estejam pendentes antes
-            // que a aplicação finalize sua execução
-            Log.Information("Shutting down web host. Closing and flushing Serilog");
-            Log.CloseAndFlush();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseConfiguration(Configuration)
-                .UseSerilog(Configuration);
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
