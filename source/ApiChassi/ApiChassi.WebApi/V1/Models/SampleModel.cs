@@ -4,7 +4,7 @@ using System;
 
 namespace ApiChassi.WebApi.V1.Models
 {
-    public class SampleModel : IPostRequestModel, IPostResponseModel, IPutRequestModel
+    public class SampleModel : IPostResponseModel, IPutRequestModel
     {
         public Guid Id { get; set; }
         public string Description { get; set; }

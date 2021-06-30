@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Controllers\" />
     <None Remove="Serilog.AspNetCore" />
     <None Remove="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" />
     <None Remove="Microsoft.Extensions.PlatformAbstractions" />
@@ -35,7 +34,6 @@
     <None Remove="V1\Controllersz\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Shared\" />
     <Folder Include="Shared\Filters\" />
     <Folder Include="Shared\Controllers\" />

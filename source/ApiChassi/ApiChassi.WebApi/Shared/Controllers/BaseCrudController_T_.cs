@@ -94,13 +94,13 @@ namespace ApiChassi.WebApi.Shared.Controllers
     }
 
     public abstract class BaseCrudController<TModel, TSearchRequestModel, TSearchResponseModel> : BaseCrudController<TModel, TSearchRequestModel, TSearchResponseModel, TModel, TModel, TModel>
-        where TModel : class, IPostRequestModel, IPostResponseModel, IPutRequestModel
+        where TModel : class, IPostResponseModel, IPutRequestModel
         where TSearchResponseModel : class
         where TSearchRequestModel : ISearchRequestModel
     { }
 
     public abstract class BaseCrudController<TModel, TSearchRequestModel> : BaseCrudController<TModel, TSearchRequestModel, TModel, TModel, TModel, TModel>
-        where TModel : class, IPostRequestModel, IPostResponseModel, IPutRequestModel
+        where TModel : class, IPostResponseModel, IPutRequestModel
         where TSearchRequestModel : ISearchRequestModel
     { }
 }

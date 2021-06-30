@@ -6,8 +6,16 @@ using System.Text.Json;
 
 namespace ApiChassi.WebApi.Shared.Filters
 {
+    /// <summary>
+    /// Fine grained swagger configurations
+    /// </summary>
     public class SwaggerDefaultValues : IOperationFilter
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="context"></param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var apiDescription = context.ApiDescription;
