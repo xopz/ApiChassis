@@ -1,76 +1,44 @@
-﻿namespace ApiChassi.WebApi.V1.Controllers
-{
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using ApiChassi.WebApi.Controllers;
-    using ApiChassi.WebApi.Models;
-    using ApiChassi.WebApi.V1.Models;
+﻿using ApiChassi.WebApi.Shared.Controllers;
+using ApiChassi.WebApi.Shared.Models;
+using ApiChassi.WebApi.V1.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class SampleController : BaseCRUDController<SampleModel, SampleFindRequestModel>
+namespace ApiChassi.WebApi.V1.Controllers
+{
+    public class SampleController : BaseCrudController<SampleModel, SampleSearchRequestModel>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         protected override Task<SampleModel> CreateAsync(SampleModel request)
         {
             return Task.FromResult(request);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         protected override Task DeleteAsync(SampleModel request)
         {
             return Task.Run(() => { });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         protected override Task<bool> ExistsAsync(Guid id)
         {
             return Task.FromResult(true);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        protected override Task<FindResult<SampleModel>> FindAsync(SampleFindRequestModel request)
+        protected override Task<SearchResult<SampleModel>> FindAsync(SampleSearchRequestModel request)
         {
-            return Task.FromResult(new FindResult<SampleModel>
+            var _data = new[] { new SampleModel { Id = new Guid(), Description = "A sample" } }.AsEnumerable();
+            return Task.FromResult(new SearchResult<SampleModel>(_data));
+        }
+
+        protected override Task<SampleModel> GetAsync(Guid id)
+        {
+            return Task.FromResult(new SampleModel
             {
-                Data = new[] { new SampleModel() }.AsEnumerable(),
-                TotalCount = 1
+                Id = id,
+                Description = "A sample"
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        protected override Task<SampleModel> GetAsync(Guid id)
-        {
-            return Task.FromResult(new SampleModel());
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         protected override Task UpdateAsync(SampleModel request)
         {
             return Task.Run(() => { });
