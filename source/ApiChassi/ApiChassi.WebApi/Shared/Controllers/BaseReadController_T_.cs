@@ -13,7 +13,7 @@ namespace ApiChassi.WebApi.Shared.Controllers
     /// </summary>
     /// <typeparam name="TGetResponseModel">The type of the `get` response</typeparam>
     /// <typeparam name="TSearchRequestModel">The type of the `search` resquest</typeparam>
-    /// <typeparam name="TSearchResponseModel">The type of the `search` request</typeparam>
+    /// <typeparam name="TSearchResponseModel">The type of the `search` response</typeparam>
     public abstract class BaseReadController<TGetResponseModel, TSearchRequestModel, TSearchResponseModel> : BaseController
         where TGetResponseModel: class
         where TSearchResponseModel: class

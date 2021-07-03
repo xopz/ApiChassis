@@ -1,6 +1,7 @@
 using ApiChassi.WebApi.Shared.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
 using System.IO.Compression;
+using System.Net.Mime;
 using System.Reflection;
 
 namespace ApiChassi.WebApi
@@ -67,7 +69,17 @@ namespace ApiChassi.WebApi
                 {
                     options.RespectBrowserAcceptHeader = true;
                 })
-                .AddXmlSerializerFormatters();
+                .AddXmlSerializerFormatters()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        var result = new BadRequestObjectResult(context.ModelState);
+                        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                        result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+                        return result;
+                    };
+                });
 
             services.AddSwaggerGen(options =>
             {
@@ -79,10 +91,7 @@ namespace ApiChassi.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiVersionDescriptionProvider)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler("/error");
 
             var supportedCultures = new[] { "en-US", "pt-BR" };
             app.UseRequestLocalization(options =>
