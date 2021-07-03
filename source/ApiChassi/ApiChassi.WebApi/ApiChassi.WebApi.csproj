@@ -6,6 +6,10 @@
     <UserSecretsId>6df4f01c-9487-4da8-868a-dae0bb23d70e</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\net5.0\ApiChassi.WebApi.xml</DocumentationFile>
