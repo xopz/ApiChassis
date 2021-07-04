@@ -45,7 +45,7 @@ namespace ApiChassi.WebApi.Shared.Controllers
         public virtual async Task<ActionResult<IEnumerable<TGetResponseModel>>> GetList(ApiVersion version, [FromQuery]TSearchRequestModel request)
         {
             var _result = await FindAsync(request);
-            Response.Headers.Add("X-Total-Count", _result.TotalCount.ToString());
+            Response?.Headers?.Add("X-Total-Count", _result.TotalCount.ToString());
             return Ok(_result.Data);
         }
 

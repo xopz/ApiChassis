@@ -18,14 +18,18 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="Bogus" Version="33.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="Moq" />
+    <None Remove="Controllers\Stubs\" />
+    <None Remove="Bogus" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Controllers\Stubs\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApiChassi.WebApi\ApiChassi.WebApi.csproj" />
