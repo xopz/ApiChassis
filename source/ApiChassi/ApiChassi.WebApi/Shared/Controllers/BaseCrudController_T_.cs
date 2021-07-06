@@ -74,7 +74,7 @@ namespace ApiChassi.WebApi.Shared.Controllers
             });
 
             var _item = await CreateAsync(item);
-            var _urlString = $"{HttpContext.Request.Path}/{_item.Id}";
+            var _urlString = $"{HttpContext?.Request?.Path ?? ""}/{_item.Id}";
             return Created(_urlString, _item);
         }
 
