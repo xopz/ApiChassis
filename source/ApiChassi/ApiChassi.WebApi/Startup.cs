@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
 using System.IO.Compression;
@@ -103,6 +102,17 @@ namespace ApiChassi.WebApi
                 options.FallBackToParentCultures = true;
                 options.FallBackToParentUICultures = true;
                 options.ApplyCurrentCultureToResponseHeaders = true;
+            });
+
+            app.UseHsts();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Content-Security-Policy", @"base-uri 'self'; default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+                context.Response.Headers.Add("X-Frame-Options", "DENY");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                await next();
             });
 
             app.UseCors();

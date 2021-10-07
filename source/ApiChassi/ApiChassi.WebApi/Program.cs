@@ -39,6 +39,7 @@ namespace ApiChassi.WebApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(options => options.AddServerHeader = false);
                 });
     }
 }
