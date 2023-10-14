@@ -1,1 +1,0 @@
-docker build -f ../.environment/Dockerfile ../Template.Api

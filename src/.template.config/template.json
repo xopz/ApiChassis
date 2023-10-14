@@ -1,8 +1,0 @@
-{
-    "$schema": "http://json.schemastore.org/template",
-    "author": "XOPZ Team",
-    "classifications": ["Web", "WebAPI"],
-    "identity": "net.xopz.apichassi",
-    "name": "API Chassis by XOPZ",
-    "shortName": "apichassi"
-}

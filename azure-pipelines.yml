@@ -1,19 +1,40 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
+# trigger:
+# - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "vs2017-win2016"
+
+# container: mcr.microsoft.com/dotnet/core/sdk:2.2
+
+# variables:
+#   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - script: |
+      dotnet build ./source/ApiChassi/ApiChassi.sln
+    displayName: "Build"
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - script: |
+      dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover ./source/ApiChassi/ApiChassi.sln
+    displayName: "Unit Test"
+
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: 
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: './.nuget/XopzApiTemplate.nuspec'
+      versioningScheme: 'byPrereleaseNumber'
+      majorVersion: '0'
+      minorVersion: '0'
+      patchVersion: '1'
+      basePath: '.'
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'XopzTeamNugetServiceConnection'
