@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  apichassi.webapi:
-    image: ${DOCKER_REGISTRY-}apichassi
-    build:
-      context: .
-      dockerfile: ApiChassi.WebApi/Dockerfile
