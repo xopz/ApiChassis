@@ -1,4 +1,6 @@
 using System.IO.Compression;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 using Microsoft.AspNetCore.ResponseCompression;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -34,7 +36,19 @@ builder.Services
     .AddVersionedApiExplorer();
 
 // Add API versioning
-builder.Services.AddApiVersioning();
+builder.Services
+    .AddApiVersioning(options =>
+    {
+        options.ReportApiVersions = true;
+        options.Conventions.Add(new VersionByNamespaceConvention());
+        options.AssumeDefaultVersionWhenUnspecified = true;
+    })
+    .AddVersionedApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+        options.AssumeDefaultVersionWhenUnspecified = true;
+    });
 
 builder.Services
     .AddControllers(options => options.RespectBrowserAcceptHeader = true)
@@ -46,8 +60,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    foreach (var versionDescription in apiVersionDescriptionProvider.ApiVersionDescriptions)
+    {
+        options.SwaggerEndpoint($"/swagger/{versionDescription.GroupName}/swagger.json", versionDescription.GroupName.ToUpperInvariant());
+    }
+    // options.RoutePrefix = string.Empty;
+});
 
 app.UseHttpsRedirection();
 

@@ -1,5 +1,9 @@
 using System.Net;
+using ApiChassi.Api.V1.Example.Requests;
+using ApiChassi.Api.V1.Example.Responses;
 using Microsoft.AspNetCore.Mvc;
+
+namespace ApiChassi.Api.V1.Example;
 
 [ApiController]
 [Route("v{version:apiVersion}/[controller]")]
@@ -26,7 +30,7 @@ public class ExampleController : ControllerBase
         return CreatedAtAction(nameof(GetAsync), new { id = Guid.NewGuid() }, result);
     }
 
-    [HttpGet("/{id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(ExampleResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
@@ -37,7 +41,7 @@ public class ExampleController : ControllerBase
         return Ok(data);
     }
 
-    [HttpPut("/{id}")]
+    [HttpPut("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
@@ -47,7 +51,7 @@ public class ExampleController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("/{id}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]

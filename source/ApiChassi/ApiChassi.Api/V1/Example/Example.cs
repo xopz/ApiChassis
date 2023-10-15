@@ -1,3 +1,5 @@
+namespace ApiChassi.Api.V1.Example;
+
 public class Example
 {
     public Guid Id { get; set; }
