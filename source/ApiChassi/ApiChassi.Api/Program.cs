@@ -78,3 +78,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// FOR TESTING REASONS
+// SEE: https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0#basic-tests-with-the-default-webapplicationfactory
+public partial class Program { }

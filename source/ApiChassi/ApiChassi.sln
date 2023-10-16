@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiChassi.Api", "ApiChassi.Api\ApiChassi.Api.csproj", "{7FD813B3-6313-4F9B-982D-ED216F6BCD4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiChassi.Tests.Functional", "ApiChassi.Tests.Functional\ApiChassi.Tests.Functional.csproj", "{42DF4EBC-FEA7-48FB-835D-9C3B38D4AE81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{7FD813B3-6313-4F9B-982D-ED216F6BCD4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD813B3-6313-4F9B-982D-ED216F6BCD4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD813B3-6313-4F9B-982D-ED216F6BCD4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DF4EBC-FEA7-48FB-835D-9C3B38D4AE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DF4EBC-FEA7-48FB-835D-9C3B38D4AE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DF4EBC-FEA7-48FB-835D-9C3B38D4AE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DF4EBC-FEA7-48FB-835D-9C3B38D4AE81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
